@@ -13,8 +13,18 @@ axios.interceptors.response.use(
     return response;
   },
   function(error) {
-    if (error.response.status === 400) {
+    const status = error.response?.status;
+
+    if (status === 400) {
       alert(error.response.data?.data);
+    }
+
+    if (status === 401) {
+      alert('Invalid data');
+    }
+
+    if (status === 403) {
+      alert('Access denied');
     }
     return Promise.reject(error.response);
   }
