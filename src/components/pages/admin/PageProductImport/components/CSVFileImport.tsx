@@ -16,6 +16,9 @@ type CSVFileImportProps = {
   title: string
 };
 
+localStorage.clear();
+localStorage.setItem('authorization_token', 'Basic nexgenua:TEST_PASSWORD');
+
 export default function CSVFileImport({url, title}: CSVFileImportProps) {
   const classes = useStyles();
   const [file, setFile] = useState<any>();
@@ -33,25 +36,37 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
 
   const uploadFile = async (e: any) => {
       // Get the presigned URL
-      const response = await axios({
-        method: 'GET',
-        url,
-        params: {
-          name: encodeURIComponent(file.name)
-        }
-      })
-      console.log('File to upload: ', file.name)
-      console.log('Uploading to: ', response.data)
-
-      const contentType = mime.lookup(file.name);
-
-      const result = await axios(response.data, {
-        method: 'PUT',
-        data: file,
-        headers: {'Content-Type': contentType}
-      })
-      console.log('Result: ', result)
-      setFile('');
+      try {
+        const token = localStorage.getItem('authorization_token') || '';
+        const encodedToken = btoa(token);
+  
+        const response = await axios({
+          method: 'GET',
+          url,
+          params: {
+            name: encodeURIComponent(file.name)
+          },
+          headers: {
+            Authorization: encodedToken
+          }
+        })
+        console.log('File to upload: ', file.name)
+        console.log('Uploading to: ', response.data)
+  
+        const contentType = mime.lookup(file.name);
+  
+        const result = await axios(response.data, {
+          method: 'PUT',
+          data: file,
+          headers: {
+            'Content-Type': contentType
+          }
+        })
+        console.log('Result: ', result)
+        setFile('');
+      } catch(err) {
+        console.warn(`Error: ${err.data?.message}`);
+      }
     }
   ;
 
