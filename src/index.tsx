@@ -20,11 +20,11 @@ axios.interceptors.response.use(
     }
 
     if (status === 401) {
-      alert('Invalid data');
+      alert(error.response.data?.message);
     }
 
     if (status === 403) {
-      alert('Access denied');
+      alert(error.response.data?.message);
     }
     return Promise.reject(error.response);
   }
