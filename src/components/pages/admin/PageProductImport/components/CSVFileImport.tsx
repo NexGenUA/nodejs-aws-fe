@@ -50,8 +50,17 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
             Authorization: encodedToken
           }
         })
-        console.log('File to upload: ', file.name)
-        console.log('Uploading to: ', response.data)
+
+        console.log(
+          '%cFile to upload:',
+          'color: white; background-color: #017d39; padding: 4px 7px; font-style: italic; border-radius: 5px',
+          file.name
+        );
+        console.log(
+          '%cUploading to:',
+          'color: white; background-color: #017d39; padding: 4px 7px; font-style: italic; border-radius: 5px',
+          response.data
+        );
   
         const contentType = mime.lookup(file.name);
   
@@ -61,11 +70,14 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
           headers: {
             'Content-Type': contentType
           }
-        })
+        });
         console.log('Result: ', result)
         setFile('');
       } catch(err) {
-        console.warn(`Error: ${err.data?.message}`);
+        console.log(
+          '%cError:',
+          'color: white; background-color: #d33f49; padding: 4px 7px; font-style: italic; border-radius: 5px',
+          err.data?.message);
       }
     }
   ;
