@@ -50,6 +50,7 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
             Authorization: encodedToken
           }
         })
+
         console.log(
           '%cFile to upload:',
           'color: white; background-color: #017d39; padding: 4px 7px; font-style: italic; border-radius: 5px',
@@ -59,7 +60,6 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
           '%cUploading to:',
           'color: white; background-color: #017d39; padding: 4px 7px; font-style: italic; border-radius: 5px',
           response.data
-          );
   
         const contentType = mime.lookup(file.name);
   
