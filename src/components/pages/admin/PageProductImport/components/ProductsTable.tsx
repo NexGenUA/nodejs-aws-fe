@@ -14,11 +14,22 @@ import {formatAsPrice} from "utils/utils";
 
 export default function ProductsTable() {
   const [products, setProducts] = useState<any>([]);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    axios.get(`${API_PATHS.bff}/products`)
-      .then(res => setProducts(res.data));
-  }, []);
+    axios.get(`${API_PATHS.bff}/products`, {
+      headers: {
+        Authorization: token
+      }
+    })
+      .then(res => setProducts(res.data))
+      .catch(err => {
+        console.log(
+          '%cError:',
+          'color: white; background-color: #d33f49; padding: 4px 7px; font-style: italic; border-radius: 5px',
+          err.data?.message);
+      });
+  }, [token]);
 
   const onDelete = (id: string) => {
     axios.delete(`${API_PATHS.bff}/products/${id}`)

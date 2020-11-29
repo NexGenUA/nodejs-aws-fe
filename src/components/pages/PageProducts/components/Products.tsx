@@ -11,6 +11,7 @@ import {formatAsPrice} from "utils/utils";
 import AddProductToCart from "components/AddProductToCart/AddProductToCart";
 import axios from 'axios';
 import API_PATHS from "constants/apiPaths";
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -33,11 +34,25 @@ const useStyles = makeStyles((theme) => ({
 export default function Products() {
   const classes = useStyles();
   const [products, setProducts] = useState<Product[]>([]);
+  const token = localStorage.getItem('token');
+  const history = useHistory();
 
   useEffect(() => {
-    axios.get(`${API_PATHS.bff}/products/`)
-      .then(res => setProducts(res.data));
-  }, [])
+    axios.get(`${API_PATHS.bff}/products/`, {
+      headers: {
+        Authorization: token
+      }
+    })
+      .then(res => setProducts(res.data))
+      .catch(err => {
+        console.log(
+          '%cError:',
+          'color: white; background-color: #d33f49; padding: 4px 7px; font-style: italic; border-radius: 5px',
+          err.data?.message);
+        history.push('/admin');
+        history.push('/admin/products');
+      });;
+  }, [history, token])
 
   return (
     <Grid container spacing={4}>

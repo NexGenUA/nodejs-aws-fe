@@ -16,7 +16,6 @@ type CSVFileImportProps = {
   title: string
 };
 
-localStorage.clear();
 localStorage.setItem('authorization_token', 'Basic nexgenua:TEST_PASSWORD');
 
 export default function CSVFileImport({url, title}: CSVFileImportProps) {
