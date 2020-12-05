@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import mime from 'mime-types';
 
@@ -16,10 +16,7 @@ type CSVFileImportProps = {
   title: string
 };
 
-localStorage.clear();
-localStorage.setItem('authorization_token', 'Basic nexgenua:TEST_PASSWORD');
-
-export default function CSVFileImport({url, title}: CSVFileImportProps) {
+export default function CSVFileImport({ url, title }: CSVFileImportProps) {
   const classes = useStyles();
   const [file, setFile] = useState<any>();
 
@@ -35,20 +32,14 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
   };
 
   const uploadFile = async (e: any) => {
-      // Get the presigned URL
       try {
-        const token = localStorage.getItem('authorization_token') || '';
-        const encodedToken = btoa(token);
-  
+
         const response = await axios({
           method: 'GET',
           url,
           params: {
             name: encodeURIComponent(file.name)
           },
-          headers: {
-            Authorization: encodedToken
-          }
         })
 
         console.log(
@@ -56,24 +47,25 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
           'color: white; background-color: #017d39; padding: 4px 7px; font-style: italic; border-radius: 5px',
           file.name
         );
+
         console.log(
           '%cUploading to:',
           'color: white; background-color: #017d39; padding: 4px 7px; font-style: italic; border-radius: 5px',
           response.data
         );
-  
+
         const contentType = mime.lookup(file.name);
-  
+
         const result = await axios(response.data, {
           method: 'PUT',
           data: file,
           headers: {
             'Content-Type': contentType
           }
-        });
+        })
         console.log('Result: ', result)
         setFile('');
-      } catch(err) {
+      } catch (err) {
         console.log(
           '%cError:',
           'color: white; background-color: #d33f49; padding: 4px 7px; font-style: italic; border-radius: 5px',
@@ -88,7 +80,7 @@ export default function CSVFileImport({url, title}: CSVFileImportProps) {
         {title}
       </Typography>
       {!file ? (
-          <input type="file" onChange={onFileChange}/>
+        <input type="file" onChange={onFileChange}/>
       ) : (
         <div>
           <button onClick={removeFile}>Remove file</button>
